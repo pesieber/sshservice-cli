@@ -1,5 +1,6 @@
 # MFA access to CSCS (ela, daint) with modifications
 
+On IAC linux:
 ```sh
 git clone https://github.com/pesieber/sshservice-cli.git CSCS_sshservice-cli
 git clone git@github.com:pesieber/sshservice-cli.git CSCS_sshservice-cli
@@ -35,6 +36,24 @@ alias todaint='bash ~/CSCS_sshservice-cli/cscs-keygen.sh'
 After generating and adding the key, you can login directly:
 ```sh
 ssh daint
+```
+
+
+## Mount remote directories with sshfs (e.g. mount daint)
+
+Put the function ssh_mnt in your .bashrc:
+```sh
+ssh_mnt () {
+    mkdir -p $2
+    sshfs $1 $2 -o auto_cache,reconnect,follow_symlinks
+}
+```
+
+To create a mount, e.g.:
+```sh
+ssh iac_server_name # needed in Jupyter lab, although you are already on your server!
+ssh_mnt daint:/users/cscs_user_name ~/mounts/daint_home
+ssh_mnt daint:/project/cscs_project_name/cscs_user_name ~/mounts/daint_project
 ```
 
 
